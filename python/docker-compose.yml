@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+  python:
+    image: python:3-stretch
+    command: sh -c "pip install -r requirements.txt && python -m server"
+    environment:
+      - PORT=9000
+      - FLASK_ENV=development
+    ports:
+      - '9000:9000'
+    working_dir: /root/python
+    volumes:
+      - ./web:/root/python:cached # <--- This will map ./python to /root/python inside the container.

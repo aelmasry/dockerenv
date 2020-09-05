@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+  nodejs:
+    build: ./web
+    command: sh -c "npm install && npm start"
+    environment:
+      - NODE_ENV=development
+      - PORT=7000
+    ports:
+      - '7000:7000'
+    working_dir: /root/nodejs
+    volumes:
+      - ./web:/root/nodejs:cached # <--- This will map ./nodejs to /root/nodejs inside the container.
