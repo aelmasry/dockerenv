@@ -1,23 +1,35 @@
-version: "3.1"
+version: '3.2'
+
 services:
-  mysql-server:
-    image: mysql:8.0.19
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-    volumes:
-      - mysql-data:/var/lib/mysql
-    ports:
-      - "3306:3306"
-   
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.0.1
-    restart: always
-    environment:
-      PMA_HOST: mysql-server
-      PMA_USER: root
-      PMA_PASSWORD: secret
-    ports:
-      - "8080:80"
-volumes:
-  mysql-data:
+   mysql_server:
+      image: mysql:5.7.22
+      container_name: mysql_server
+      restart: always
+      ports:
+         - '3306:3306'
+      environment:
+         MYSQL_ROOT_PASSWORD: root
+         MYSQL_USER: root
+         MYSQL_PASSWORD: root
+      volumes:
+         - ./databases:/var/lib/mysql
+         - ./logs:/var/log/mysql
+      networks:
+         - app-network
+   phpmyadmin:
+      depends_on:
+       - mysql_server
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      restart: always
+      ports:
+       - '8080:80'
+      environment:
+        PMA_HOST: mysql_server
+      networks:
+         - app-network
+
+#Docker Networks
+networks:
+   app-network:
+      driver: bridge
